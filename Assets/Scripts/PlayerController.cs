@@ -5,9 +5,11 @@ public class PlayerController : MonoBehaviour
 {
     public float force = 10;
     public float currentSpeed = 0;
+    public bool gameOver = false;
+    public bool gameEnd = false;
 
     private Rigidbody rb;
-    public GameObject player;
+    private GameObject player;
     private InputAction moveUp;
     private InputAction moveLeft;
     private InputAction moveRight;
@@ -24,32 +26,38 @@ public class PlayerController : MonoBehaviour
         moveLeft = InputSystem.actions.FindAction("MoveLeft");
         moveRight = InputSystem.actions.FindAction("MoveRight");
         moveDown = InputSystem.actions.FindAction("MoveDown");
+
+        gameOver = false;
+    }
+    void Move()
+    {
+        rb.AddForce(transform.forward * force, ForceMode.Impulse);
     }
 
     void Update()
     {
         if (currentSpeed <= 0.1 && moveUp.triggered)
         {
-            player.transform.Rotate(0, 0, 0);
-            rb.AddForce(transform.forward * force, ForceMode.Impulse);
+            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            Invoke("Move", 0.1f);
 
         }
         else if (currentSpeed <= 0.1 && moveLeft.triggered)
         {
-            player.transform.Rotate(0, -90, 0);
-            rb.AddForce(transform.forward * force, ForceMode.Impulse);
+            transform.eulerAngles = new Vector3(0f, -90f, 0f);
+            Invoke("Move", 0.1f);
 
         }
         else if (currentSpeed <= 0.1 && moveRight.triggered)
         {
-            player.transform.Rotate(0, 90, 0);
-            rb.AddForce(transform.forward * force, ForceMode.Impulse);
+            transform.eulerAngles = new Vector3(0f, 90f, 0f);
+            Invoke("Move", 0.1f);
 
         }
         else if (currentSpeed <= 0.1 && moveDown.triggered)
         {
-            player.transform.Rotate(0, 180, 0);
-            rb.AddForce(transform.forward * force, ForceMode.Impulse);
+            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            Invoke("Move", 0.1f);
 
         }
     }
@@ -58,5 +66,22 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         currentSpeed = rb.linearVelocity.magnitude;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            Debug.Log("Game Over");
+            Destroy(player);
+            gameOver = true;
+            Time.timeScale = 0;
+        }
+        else if (other.gameObject.CompareTag("Goal"))
+        {
+            Debug.Log("Game End");
+            gameEnd = true;
+            Time.timeScale = 0;
+        }
     }
 }
