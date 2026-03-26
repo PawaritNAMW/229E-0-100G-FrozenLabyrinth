@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
         else if (other.gameObject.CompareTag("Goal"))
         {
             Debug.Log("Game End");
+            Destroy(player);
             gameEnd = true;
             Time.timeScale = 0;
         }
