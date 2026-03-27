@@ -7,13 +7,10 @@ public class PlayerController : MonoBehaviour
     public float currentSpeed = 0;
     public bool gameOver = false;
     public bool gameEnd = false;
+    public GameObject pauseMenu;
 
     private Rigidbody rb;
     private GameObject player;
-    private InputAction moveUp;
-    private InputAction moveLeft;
-    private InputAction moveRight;
-    private InputAction moveDown;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -22,11 +19,6 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        moveUp = InputSystem.actions.FindAction("MoveUp");
-        moveLeft = InputSystem.actions.FindAction("MoveLeft");
-        moveRight = InputSystem.actions.FindAction("MoveRight");
-        moveDown = InputSystem.actions.FindAction("MoveDown");
-
         gameOver = false;
     }
     void Move()
@@ -36,29 +28,40 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (currentSpeed <= 0.1 && moveUp.triggered)
+        if (currentSpeed <= 0.1 && Keyboard.current.wKey.wasPressedThisFrame)
         {
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
             Invoke("Move", 0.1f);
 
         }
-        else if (currentSpeed <= 0.1 && moveLeft.triggered)
+        else if (currentSpeed <= 0.1 && Keyboard.current.aKey.wasPressedThisFrame)
         {
             transform.eulerAngles = new Vector3(0f, -90f, 0f);
             Invoke("Move", 0.1f);
 
         }
-        else if (currentSpeed <= 0.1 && moveRight.triggered)
+        else if (currentSpeed <= 0.1 && Keyboard.current.dKey.wasPressedThisFrame)
         {
             transform.eulerAngles = new Vector3(0f, 90f, 0f);
             Invoke("Move", 0.1f);
 
         }
-        else if (currentSpeed <= 0.1 && moveDown.triggered)
+        else if (currentSpeed <= 0.1 && Keyboard.current.sKey.wasPressedThisFrame)
         {
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
             Invoke("Move", 0.1f);
 
+        }
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame && !pauseMenu.activeSelf)
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else if (Keyboard.current.escapeKey.wasPressedThisFrame &&  pauseMenu.activeSelf)
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
         }
     }
 
