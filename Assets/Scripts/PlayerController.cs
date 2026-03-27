@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public bool gameEnd = false;
     public GameObject pauseMenu;
+    public GameObject gameOverUI;
+    public GameObject gameEndUI;
 
     private Rigidbody rb;
     private GameObject player;
@@ -53,15 +56,18 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (Keyboard.current.escapeKey.wasPressedThisFrame && !pauseMenu.activeSelf)
+        if (!gameEnd || !gameOver)
         {
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0f;
-        }
-        else if (Keyboard.current.escapeKey.wasPressedThisFrame &&  pauseMenu.activeSelf)
-        {
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1f;
+            if (Keyboard.current.escapeKey.wasPressedThisFrame && !pauseMenu.activeSelf)
+            {
+                pauseMenu.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            else if (Keyboard.current.escapeKey.wasPressedThisFrame && pauseMenu.activeSelf)
+            {
+                pauseMenu.SetActive(false);
+                Time.timeScale = 1f;
+            }
         }
     }
 
@@ -78,13 +84,20 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Game Over");
             Destroy(player);
             gameOver = true;
+            gameOverUI.SetActive(true);
             Time.timeScale = 0;
         }
         else if (other.gameObject.CompareTag("Goal"))
         {
+            Destroy(player);
+            SceneManager.LoadScene("Level2");
+        }
+        else if (other.gameObject.CompareTag("Exit"))
+        {
             Debug.Log("Game End");
             Destroy(player);
             gameEnd = true;
+            gameEndUI.SetActive(true);
             Time.timeScale = 0;
         }
     }
