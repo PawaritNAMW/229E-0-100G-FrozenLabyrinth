@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     public bool gameEnd = false;
     public GameObject pauseMenu;
     public GameObject gameOverUI;
-    public GameObject gameEndUI;
 
     private Rigidbody rb;
     private GameObject player;
@@ -97,8 +96,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Game End");
             Destroy(player);
             gameEnd = true;
-            gameEndUI.SetActive(true);
-            Time.timeScale = 0;
+            SceneManager.LoadScene("Credit");
         }
     }
 }
