@@ -1,15 +1,18 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float force = 10;
-    public float currentSpeed = 0;
+    public float force = 5f;
+    public float currentSpeed = 0f;
+    public float stepTaken = 0f;
     public bool gameOver = false;
     public bool gameEnd = false;
     public GameObject pauseMenu;
     public GameObject gameOverUI;
+    public TMP_Text stepText;
 
     private Rigidbody rb;
     private GameObject player;
@@ -22,14 +25,26 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         gameOver = false;
+        stepText.text = "Step Taken: " + stepTaken.ToString();
     }
     void Move()
     {
+        stepTaken++;
         rb.AddForce(transform.forward * force, ForceMode.Impulse);
+        stepText.text = "Step Taken: " + stepTaken.ToString();
     }
 
     void Update()
     {
+        if (Keyboard.current.shiftKey.isPressed)
+        {
+            force = 7f;
+        }
+        else
+        {
+            force = 5f;
+        }
+
         if (currentSpeed <= 0.1 && Keyboard.current.wKey.wasPressedThisFrame)
         {
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
