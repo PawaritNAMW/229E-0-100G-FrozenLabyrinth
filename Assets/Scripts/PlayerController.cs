@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float force = 5f;
+    public float force = 0;
+    public float accel = 0;
+    public float mass = 0;
     public float currentSpeed = 0f;
     public float stepTaken = 0f;
     public bool gameOver = false;
@@ -24,11 +26,13 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
+        mass = rb.mass;
         gameOver = false;
         stepText.text = "Step Taken: " + stepTaken.ToString();
     }
     void Move()
     {
+        force = mass * accel;
         stepTaken++;
         rb.AddForce(transform.forward * force, ForceMode.Impulse);
         stepText.text = "Step Taken: " + stepTaken.ToString();
@@ -38,11 +42,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Keyboard.current.shiftKey.isPressed)
         {
-            force = 7f;
+            accel = 7f;
         }
         else
         {
-            force = 5f;
+            accel = 5f;
         }
 
         if (currentSpeed <= 0.1 && Keyboard.current.wKey.wasPressedThisFrame)
