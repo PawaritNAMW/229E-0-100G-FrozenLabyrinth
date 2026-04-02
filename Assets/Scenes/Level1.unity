@@ -2366,7 +2366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca68aa9c0a27b044eb52f73fce798795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  force: 5
+  force: 0
+  accel: 0
+  mass: 0
   currentSpeed: 0
   stepTaken: 0
   gameOver: 0
@@ -3094,6 +3096,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   force: 10
+  accel: 0
+  mass: 0
   currentSpeed: 0
   stepTaken: 0
   gameOver: 0
